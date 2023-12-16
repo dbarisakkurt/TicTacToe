@@ -1,0 +1,58 @@
+﻿@page "/"
+@inject GameState GameState
+
+
+<div class="container">
+    <div class="row">
+        <div class="cell" @onclick="(() => Play(0, 0))">@GameState.GetCell(0, 0)</div>
+        <div class="cell" @onclick="(() => Play(0, 1))">@GameState.GetCell(0, 1)</div>
+        <div class="cell" @onclick="(() => Play(0, 2))">@GameState.GetCell(0, 2)</div>
+    </div>
+    <div class="row">
+        <div class="cell" @onclick="(() => Play(1, 0))">@GameState.GetCell(1, 0)</div>
+        <div class="cell" @onclick="(() => Play(1, 1))">@GameState.GetCell(1, 1)</div>
+        <div class="cell" @onclick="(() => Play(1, 2))">@GameState.GetCell(1, 2)</div>
+    </div>
+    <div class="row">
+        <div class="cell" @onclick="(() => Play(2, 0))">@GameState.GetCell(2, 0)</div>
+        <div class="cell" @onclick="(() => Play(2, 1))">@GameState.GetCell(2, 1)</div>
+        <div class="cell" @onclick="(() => Play(2, 2))">@GameState.GetCell(2, 2)</div>
+    </div>
+</div>
+
+<div class="game-info">
+    @if (Result == GameResult.Player1Won)
+    {
+        <p class="text-fill-width">Player 1 won</p>
+    }
+    else if (Result == GameResult.Player2Won)
+    {
+        <p class="text-fill-width">Player 2 won</p>
+    }
+    else if (Result == GameResult.Draw)
+    {
+        <p class="text-fill-width">It is a draw</p>
+    }
+
+    <button class="large-button" @onclick="Restart">Restart</button>
+</div>
+
+
+@code {
+    private GameResult Result { get; set; } = GameResult.OnGoing;
+
+    private void Play(int x, int y)
+    {
+        if(Result == GameResult.OnGoing && GameState.GetCell(x, y) == null)
+        {
+            GameState.UpdateCell(x, y);
+            Result = GameState.GetGameResult();
+        }
+    }
+
+    private void Restart()
+    {
+        Result = GameResult.OnGoing;
+        GameState.Reset();
+    }
+}
